@@ -1,0 +1,103 @@
+{
+  "trace_file": "/mnt/e/VIT (Semester VII)/Final year project/Real_time_ransomware_detection/datasets/benign_events.json",
+  "total_events": 83,
+  "total_windows": 2,
+  "max_threat_assessment": {
+    "pid": 4230,
+    "process": "python3",
+    "classification": "BENIGN",
+    "threat_score": 0.0,
+    "rule_score": 0.0,
+    "ml_score": 0.0,
+    "context_score": 0.0,
+    "confidence": 0.25,
+    "model_version": "rf_v0.2",
+    "feature_summary": {
+      "writes_per_second": 0.4,
+      "renames_per_second": 0.0,
+      "files_modified": 2,
+      "write_ratio": 0.0,
+      "bulk_ratio": 0.0,
+      "write_count_ratio": 0.02,
+      "continuous_write_count": 1,
+      "burstiness": 0.68
+    },
+    "evidence": [
+      "Normal activity patterns within expected benign thresholds"
+    ],
+    "triggered_rules": [],
+    "window_info": {
+      "window_id": "pid_4230_w0_1789536695.36",
+      "duration": 5.0,
+      "event_count": 83,
+      "start": 1789536695.360893,
+      "end": 1789536700.360893
+    }
+  },
+  "window_assessments": [
+    {
+      "pid": 4230,
+      "process": "python3",
+      "classification": "BENIGN",
+      "threat_score": 0.0,
+      "rule_score": 0.0,
+      "ml_score": 0.0,
+      "context_score": 0.0,
+      "confidence": 0.25,
+      "model_version": "rf_v0.2",
+      "feature_summary": {
+        "writes_per_second": 0.4,
+        "renames_per_second": 0.0,
+        "files_modified": 2,
+        "write_ratio": 0.0,
+        "bulk_ratio": 0.0,
+        "write_count_ratio": 0.02,
+        "continuous_write_count": 1,
+        "burstiness": 0.68
+      },
+      "evidence": [
+        "Normal activity patterns within expected benign thresholds"
+      ],
+      "triggered_rules": [],
+      "window_info": {
+        "window_id": "pid_4230_w0_1789536695.36",
+        "duration": 5.0,
+        "event_count": 83,
+        "start": 1789536695.360893,
+        "end": 1789536700.360893
+      }
+    },
+    {
+      "pid": 4230,
+      "process": "python3",
+      "classification": "BENIGN",
+      "threat_score": 0.0,
+      "rule_score": 0.0,
+      "ml_score": 0.0,
+      "context_score": 0.0,
+      "confidence": 0.25,
+      "model_version": "rf_v0.2",
+      "feature_summary": {
+        "writes_per_second": 0.0,
+        "renames_per_second": 0.0,
+        "files_modified": 0,
+        "write_ratio": 0.0,
+        "bulk_ratio": 0.0,
+        "write_count_ratio": 0.0,
+        "continuous_write_count": 0,
+        "burstiness": 0.0
+      },
+      "evidence": [
+        "Normal activity patterns within expected benign thresholds"
+      ],
+      "triggered_rules": [],
+      "window_info": {
+        "window_id": "pid_4230_w1_1789536696.36",
+        "duration": 5.0,
+        "event_count": 1,
+        "start": 1789536696.360893,
+        "end": 1789536701.360893
+      }
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+# RansomShield Collector Package

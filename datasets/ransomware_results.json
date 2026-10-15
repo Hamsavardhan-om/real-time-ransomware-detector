@@ -1,0 +1,151 @@
+{
+  "trace_file": "/mnt/e/VIT (Semester VII)/Final year project/Real_time_ransomware_detection/datasets/ransomware_events.json",
+  "total_events": 1354,
+  "total_windows": 1,
+  "max_threat_assessment": {
+    "pid": 4245,
+    "process": "python3",
+    "classification": "RANSOMWARE_LIKE",
+    "threat_score": 75.0,
+    "rule_score": 100.0,
+    "ml_score": 70.0,
+    "context_score": 0.0,
+    "confidence": 0.75,
+    "model_version": "rf_v0.2",
+    "feature_summary": {
+      "writes_per_second": 121.2,
+      "renames_per_second": 24.0,
+      "files_modified": 246,
+      "write_ratio": 0.91,
+      "bulk_ratio": 0.99,
+      "write_count_ratio": 0.45,
+      "continuous_write_count": 5,
+      "burstiness": 0.83
+    },
+    "evidence": [
+      "High File Write Frequency: Write rate (121.2/s) exceeded suspicious threshold",
+      "High File Rename Frequency: Rename rate (24.0/s) indicates bulk extension modification",
+      "Bulk I/O Write Ratio: Bulk write ratio (0.99) and write ratio (0.91) indicate bulk transformation",
+      "High Continuous Write Count: Continuous write count CWC (5) indicates unbroken write loop",
+      "Broad Directory Traversal & Modification: Modified 246 files across 8 directories"
+    ],
+    "triggered_rules": [
+      {
+        "rule_id": "R1_HIGH_WRITE_RATE",
+        "name": "High File Write Frequency",
+        "triggered": true,
+        "weight": 25.0,
+        "description": "Write rate (121.2/s) exceeded suspicious threshold"
+      },
+      {
+        "rule_id": "R2_HIGH_RENAME_RATE",
+        "name": "High File Rename Frequency",
+        "triggered": true,
+        "weight": 25.0,
+        "description": "Rename rate (24.0/s) indicates bulk extension modification"
+      },
+      {
+        "rule_id": "R3_BULK_WRITES",
+        "name": "Bulk I/O Write Ratio",
+        "triggered": true,
+        "weight": 20.0,
+        "description": "Bulk write ratio (0.99) and write ratio (0.91) indicate bulk transformation"
+      },
+      {
+        "rule_id": "R4_HIGH_CWC",
+        "name": "High Continuous Write Count",
+        "triggered": true,
+        "weight": 15.0,
+        "description": "Continuous write count CWC (5) indicates unbroken write loop"
+      },
+      {
+        "rule_id": "R5_MULTI_DIR_TRAVERSAL",
+        "name": "Broad Directory Traversal & Modification",
+        "triggered": true,
+        "weight": 15.0,
+        "description": "Modified 246 files across 8 directories"
+      }
+    ],
+    "window_info": {
+      "window_id": "pid_4245_w0_1789536701.97",
+      "duration": 5.0,
+      "event_count": 1354,
+      "start": 1789536701.970368,
+      "end": 1789536706.970368
+    }
+  },
+  "window_assessments": [
+    {
+      "pid": 4245,
+      "process": "python3",
+      "classification": "RANSOMWARE_LIKE",
+      "threat_score": 75.0,
+      "rule_score": 100.0,
+      "ml_score": 70.0,
+      "context_score": 0.0,
+      "confidence": 0.75,
+      "model_version": "rf_v0.2",
+      "feature_summary": {
+        "writes_per_second": 121.2,
+        "renames_per_second": 24.0,
+        "files_modified": 246,
+        "write_ratio": 0.91,
+        "bulk_ratio": 0.99,
+        "write_count_ratio": 0.45,
+        "continuous_write_count": 5,
+        "burstiness": 0.83
+      },
+      "evidence": [
+        "High File Write Frequency: Write rate (121.2/s) exceeded suspicious threshold",
+        "High File Rename Frequency: Rename rate (24.0/s) indicates bulk extension modification",
+        "Bulk I/O Write Ratio: Bulk write ratio (0.99) and write ratio (0.91) indicate bulk transformation",
+        "High Continuous Write Count: Continuous write count CWC (5) indicates unbroken write loop",
+        "Broad Directory Traversal & Modification: Modified 246 files across 8 directories"
+      ],
+      "triggered_rules": [
+        {
+          "rule_id": "R1_HIGH_WRITE_RATE",
+          "name": "High File Write Frequency",
+          "triggered": true,
+          "weight": 25.0,
+          "description": "Write rate (121.2/s) exceeded suspicious threshold"
+        },
+        {
+          "rule_id": "R2_HIGH_RENAME_RATE",
+          "name": "High File Rename Frequency",
+          "triggered": true,
+          "weight": 25.0,
+          "description": "Rename rate (24.0/s) indicates bulk extension modification"
+        },
+        {
+          "rule_id": "R3_BULK_WRITES",
+          "name": "Bulk I/O Write Ratio",
+          "triggered": true,
+          "weight": 20.0,
+          "description": "Bulk write ratio (0.99) and write ratio (0.91) indicate bulk transformation"
+        },
+        {
+          "rule_id": "R4_HIGH_CWC",
+          "name": "High Continuous Write Count",
+          "triggered": true,
+          "weight": 15.0,
+          "description": "Continuous write count CWC (5) indicates unbroken write loop"
+        },
+        {
+          "rule_id": "R5_MULTI_DIR_TRAVERSAL",
+          "name": "Broad Directory Traversal & Modification",
+          "triggered": true,
+          "weight": 15.0,
+          "description": "Modified 246 files across 8 directories"
+        }
+      ],
+      "window_info": {
+        "window_id": "pid_4245_w0_1789536701.97",
+        "duration": 5.0,
+        "event_count": 1354,
+        "start": 1789536701.970368,
+        "end": 1789536706.970368
+      }
+    }
+  ]
+}
