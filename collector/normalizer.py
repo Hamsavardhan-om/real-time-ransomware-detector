@@ -17,14 +17,36 @@ def calculate_shannon_entropy(data: bytes) -> float:
             entropy -= p * math.log2(p)
     return round(entropy, 4)
 
+_ENTROPY_CACHE: Dict[str, float] = {}
+
 def sample_file_entropy(path: Optional[str], sample_size: int = 4096) -> float:
-    """Reads a sample of bytes from the file to calculate Shannon entropy."""
-    if not path or not os.path.exists(path) or os.path.isdir(path):
+    """Reads a sample of bytes from the file to calculate Shannon entropy, using an in-memory cache."""
+    if not path:
         return 0.0
+
+    # Fast cache lookup to eliminate redundant DrvFS disk reads
+    if path in _ENTROPY_CACHE:
+        return _ENTROPY_CACHE[path]
+
+    target_path = path
+    if not os.path.exists(target_path):
+        for ext in [".locked", ".enc", ".crypto", ".ransom"]:
+            candidate = target_path + ext
+            if os.path.exists(candidate):
+                target_path = candidate
+                break
+
+    if not os.path.exists(target_path) or os.path.isdir(target_path):
+        return 0.0
+
     try:
-        with open(path, "rb") as f:
+        with open(target_path, "rb") as f:
             chunk = f.read(sample_size)
-            return calculate_shannon_entropy(chunk)
+            entropy = calculate_shannon_entropy(chunk)
+            if len(_ENTROPY_CACHE) > 2000:
+                _ENTROPY_CACHE.clear()
+            _ENTROPY_CACHE[path] = entropy
+            return entropy
     except Exception:
         return 0.0
 

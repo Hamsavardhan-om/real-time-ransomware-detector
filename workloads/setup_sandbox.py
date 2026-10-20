@@ -19,7 +19,14 @@ SAMPLE_EXTENSIONS = [
 def setup_sandbox(sandbox_dir: str = "/tmp/ransomware_sandbox", num_folders: int = 5, files_per_folder: int = 10):
     sandbox = Path(sandbox_dir)
     if sandbox.exists():
-        shutil.rmtree(sandbox)
+        for item in sandbox.iterdir():
+            try:
+                if item.is_dir():
+                    shutil.rmtree(item, ignore_errors=True)
+                else:
+                    item.unlink(missing_ok=True)
+            except Exception:
+                pass
     sandbox.mkdir(parents=True, exist_ok=True)
 
     folder_names = ["Documents", "Personal", "Finance", "Projects", "Archives"]
@@ -29,6 +36,10 @@ def setup_sandbox(sandbox_dir: str = "/tmp/ransomware_sandbox", num_folders: int
         folder_name = folder_names[i % len(folder_names)] + (f"_{i}" if i >= len(folder_names) else "")
         dir_path = sandbox / folder_name
         dir_path.mkdir(parents=True, exist_ok=True)
+        try:
+            os.chmod(dir_path, 0o777)
+        except Exception:
+            pass
 
         for j in range(files_per_folder):
             ext, content = SAMPLE_EXTENSIONS[j % len(SAMPLE_EXTENSIONS)]
@@ -40,7 +51,17 @@ def setup_sandbox(sandbox_dir: str = "/tmp/ransomware_sandbox", num_folders: int
             else:
                 file_path.write_bytes(content * 32)
 
+            try:
+                os.chmod(file_path, 0o666)
+            except Exception:
+                pass
+
             created_files.append(str(file_path))
+
+    try:
+        os.chmod(sandbox, 0o777)
+    except Exception:
+        pass
 
     print(f"[+] Successfully populated sandbox at '{sandbox_dir}' with {len(created_files)} mock files across {num_folders} directories.")
     return created_files

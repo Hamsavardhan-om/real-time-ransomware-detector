@@ -18,11 +18,18 @@ def run_benign(sandbox_dir: str = "/tmp/ransomware_sandbox"):
         print(f"[!] Sandbox directory {sandbox_dir} does not exist. Run setup_sandbox.py first.")
         return
 
-    print(f"[*] Running benign user workload in {sandbox_dir}...")
     files = list(sandbox.rglob("file_*"))
     if not files:
-        print("[!] No files found in sandbox.")
-        return
+        print("[*] No files found in sandbox. Auto-populating sandbox...")
+        try:
+            from workloads.setup_sandbox import setup_sandbox
+            setup_sandbox(sandbox_dir=str(sandbox), num_folders=5, files_per_folder=10)
+        except ImportError:
+            import sys
+            sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+            from workloads.setup_sandbox import setup_sandbox
+            setup_sandbox(sandbox_dir=str(sandbox), num_folders=5, files_per_folder=10)
+        files = list(sandbox.rglob("file_*"))
 
     # 1. Normal file reading (reading 10 files with humane delay)
     read_count = 0
@@ -75,7 +82,7 @@ def run_benign(sandbox_dir: str = "/tmp/ransomware_sandbox"):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--sandbox", default="/tmp/ransomware_sandbox", help="Sandbox path")
+    parser.add_argument("--sandbox", "--target-dir", dest="sandbox", default="/tmp/ransomware_sandbox", help="Sandbox path")
     args = parser.parse_args()
 
     run_benign(args.sandbox)
